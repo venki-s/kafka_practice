@@ -14,13 +14,13 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class ProducerDemoCallback {
+public class ProducerDemoKeys {
 
 	public static void main(String[] args) {
 		
-		Logger logger = LoggerFactory.getLogger(ProducerDemoCallback.class);
+		Logger logger = LoggerFactory.getLogger(ProducerDemoKeys.class);
 		
-		System.out.println("Hello callback producer");
+		System.out.println("Hello producer");
 		
 		Properties props = new Properties();
 		props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -29,9 +29,18 @@ public class ProducerDemoCallback {
 		
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(props);
 		
+		String topic = "first_topic";
+		
 		for(int i=0;i<10;i++)	{
+			
+			String key = "id_" + String.valueOf(i);
+			String value = "Hello world key " + String.valueOf(i);
+			
+			logger.info("key is " + key);
+			
+			
 			ProducerRecord<String, String> record = 
-					new ProducerRecord<String, String>("first_topic", "Hello world callback " + String.valueOf(i));
+					new ProducerRecord<String, String>(topic, key, value);
 			
 			producer.send(record, new Callback()  {
 				@Override
